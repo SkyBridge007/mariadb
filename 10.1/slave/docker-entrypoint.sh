@@ -62,6 +62,9 @@ _get_config() {
 	"$@" --verbose --help --log-bin-index="$(mktemp -u)" 2>/dev/null | awk '$1 == "'"$conf"'" { print $2; exit }'
 }
 
+# Set random server-id
+RAND="$(date +%s | rev | cut -c 1-2)$(echo ${RANDOM})" && sed -i '/\[mysqld\]/a server-id='$RAND'\nlog-bin' /etc/mysql/conf.d/mariadb.cnf
+
 # allow the container to be started with `--user`
 if [ "$1" = 'mysqld' -a -z "$wantHelp" -a "$(id -u)" = '0' ]; then
 	_check_config "$@"
@@ -167,7 +170,7 @@ if [ "$1" = 'mysqld' -a -z "$wantHelp" ]; then
 		
 		if [ "$MYSQL_REPLICATION_USER" -a "$MYSQL_REPLICATION_PASSWORD" ]; then
                 echo "STOP SLAVE;" | "${mysql[@]}" 
-                echo "CHANGE MASTER TO master_host='$MYSQL_MASTER_SERVICE_HOST', master_user='$MYSQL_REPLICATION_USER', master_password='$MYSQL_REPLICATION_PASSWORD' ;" | "${mysql[@]}"
+                echo "CHANGE MASTER TO master_host='$MYSQL_MASTER_SERVICE_HOST', master_user='$MYSQL_REPLICATION_USER', master_password='$MYSQL_REPLICATION_PASSWORD', MASTER_LOG_FILE='mysql-bin.000005',MASTER_LOG_POS=328;" | "${mysql[@]}"
                 echo "START SLAVE;" | "${mysql[@]}"
 
 		fi
