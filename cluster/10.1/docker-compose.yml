@@ -1,0 +1,33 @@
+version: '2'
+services:
+  mysql-master:
+    environment:
+      TZ: "Asia/Shanghai"
+      MASTER: "1"
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_REPLICATION_USER: "repl_user"
+      MYSQL_REPLICATION_PASSWORD: "123456"
+      MYSQL_DATABASE: "mydb"
+    image: michaelwu2018/mariadb-cluster:10.1.37
+    ports:
+      - "3306:3306"
+    restart: unless-stopped
+    hostname: mysql-master
+
+  mysql-slave:
+    environment:
+      TZ: "Asia/Shanghai"
+      SLAVE: "1"
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_REPLICATION_USER: "repl_user"
+      MYSQL_REPLICATION_PASSWORD: "123456"
+      MYSQL_MASTER_HOST: "mysql-master"
+      MYSQL_MASTER_PORT: "3306"
+      MASTER_LOG_FILE: ""
+      MASTER_LOG_POS: ""
+      MYSQL_DATABASE: "mydb"
+    image: michaelwu2018/mariadb-cluster:10.1.37
+    links:
+      - mysql-master
+    restart: unless-stopped
+    hostname: mysql-slave
