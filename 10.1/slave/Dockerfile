@@ -131,8 +131,8 @@ RUN set -ex; \
 		| xargs -0 grep -lZE '^(bind-address|log)' \
 		| xargs -rt -0 sed -Ei 's/^(bind-address|log)/#&/'; \
 # don't reverse lookup hostnames, they are usually another container
-	echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf \
-	chown -R mysql.mysql /etc/mysql/conf.d;
+	echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf; \
+	chown -R mysql.mysql /etc/mysql/conf.d
 
 # RUN RAND="$(date +%s | rev | cut -c 1-2)$(echo ${RANDOM})" && sed -i '/\[mysqld\]/a server-id='$RAND'\nlog-bin' /etc/mysql/conf.d/mariadb.cnf
 
