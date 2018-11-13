@@ -23,8 +23,8 @@ services:
       MYSQL_REPLICATION_PASSWORD: "123456"
       MYSQL_MASTER_HOST: "mysql-master"
       MYSQL_MASTER_PORT: "3306"
-      MASTER_LOG_FILE: ""
-      MASTER_LOG_POS: ""
+      MASTER_LOG_FILE: "mysqld-bin.000005"
+      MASTER_LOG_POS: "328"
       MYSQL_DATABASE: "mydb"
     image: michaelwu2018/mariadb-cluster:10.1.37
     links:
