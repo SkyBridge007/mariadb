@@ -63,7 +63,7 @@ _get_config() {
 }
 
 # Set random server-id
-RAND="$(date +%s | rev | cut -c 1-2)$(echo ${RANDOM})" && sed -i '/\[mysqld\]/a server-id='$RAND'\nlog-bin' /etc/mysql/conf.d/mariadb.cnf
+RAND="$(date +%s | rev | cut -c 1-2)$(echo ${RANDOM})";grep -wq "server-id" /etc/mysql/conf.d/mariadb.cnf && echo "server-id already exists"||sed -i '/\[mysqld\]/a server-id='$RAND'\nlog-bin' /etc/mysql/conf.d/mariadb.cnf
 
 # allow the container to be started with `--user`
 if [ "$1" = 'mysqld' -a -z "$wantHelp" -a "$(id -u)" = '0' ]; then
